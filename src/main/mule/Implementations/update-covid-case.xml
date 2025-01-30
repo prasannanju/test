@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	
+	<flow name="put:\cases:application\json:uhub-sapi-config">
+        <set-variable value="#[attributes.headers.&quot;x-correlation-id&quot; default '']" doc:name="Set correlationId" doc:id="661a5715-8096-4e75-8626-85746065cce0" variableName=" correlationId"/>
+		<logger level="INFO" doc:name="Start Log" doc:id="4eee1f6b-bcfe-474a-a1ff-641cd06a08bb" message="'transactionID: #[vars.transactionId]], correlationID: #[vars.correlationID], message: &quot;Started update covid case flow&quot;, payload: #[payload]'"/>
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	case_id: payload.caseId,
+	source: payload.source,
+	case_type: payload.caseType,
+	first_name: payload.firstName,
+	last_name: payload.lastName,
+	phone: payload.phone,
+	email: payload.email,
+	date_of_birth: payload.dateOfBirth as String {format:"yyyy-MM-dd"},
+	national_id: payload.nationalID,
+	national_id_type: payload.nationalIDType,
+	street_address: payload.address.streetAddress,
+	city: payload.address.city,
+	state: upper(payload.address.state),
+	postal: payload.address.postal,
+	country: payload.address.country
+	}
+	]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="477413c2-2bda-4cdd-9850-082b29200e97" name="update-covid-case-sub-flow"/>
+		<ee:transform doc:name="Transform Message" doc:id="ff1f9c87-d983-4eb6-9e53-cb506d36c18a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "success"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+    
+</flow>
+	
+	</mule>

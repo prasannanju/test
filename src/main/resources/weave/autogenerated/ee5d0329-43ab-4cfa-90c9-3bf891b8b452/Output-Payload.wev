@@ -1,0 +1,8 @@
+%dw 2.0
+
+type auto_ee5d0329_43ab_4cfa_90c9_3bf891b8b452_Output_Payload = {|
+  affectedRows?: Number, 
+  generatedKeys?: { _?: Number }
+|} {"typeAlias": "StatementResult",
+"typeId": "org.mule.extension.db.api.StatementResult"}
+

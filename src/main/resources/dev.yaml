@@ -1,0 +1,10 @@
+http:
+  port: "8081"
+  
+database:
+  uhub:
+    host: "localhost"
+    port: "1521"
+    user: "system"
+    password: "Krishraj@09"
+    
