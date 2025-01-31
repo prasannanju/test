@@ -48,7 +48,7 @@ output application/java
 output application/json
 ---
 {
-	"status": "Success"
+	"status": "Successfully registered"
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
